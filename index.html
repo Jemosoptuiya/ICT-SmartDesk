@@ -1,0 +1,471 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="ICT SmartDesk - ICT support and incident management prototype for PCF.">
+
+    <title>ICT SmartDesk | PCF</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">IT</div>
+                <div>
+                    <h2>ICT SmartDesk</h2>
+                    <p>Support Management</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <p class="nav-heading">MAIN MENU</p>
+
+                <a href="#dashboard" class="nav-link active">
+                    <span>▦</span> Dashboard
+                </a>
+
+                <a href="#incidents" class="nav-link">
+                    <span>▤</span> Incidents
+                </a>
+
+                <a href="#assets" class="nav-link">
+                    <span>▣</span> ICT Assets
+                </a>
+
+                <a href="#reports" class="nav-link">
+                    <span>▥</span> Reports
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>ICT SmartDesk</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Top Bar -->
+            <header class="topbar">
+                <div>
+                    <p class="breadcrumb">Workspace / Dashboard</p>
+                    <h1>ICT Support Dashboard</h1>
+                </div>
+
+                <div class="user-profile">
+                    <div class="user-avatar">IT</div>
+                    <div>
+                        <strong>ICT Officer</strong>
+                        <p>Administrator</p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Page -->
+            <div id="dashboardView" class="page-view">
+
+                <!-- Welcome Section -->
+                <section class="welcome-section">
+                    <div>
+                        <p class="eyebrow">ICT SERVICE MANAGEMENT</p>
+                        <h2>Welcome to ICT SmartDesk</h2>
+                        <p>
+                            Manage support requests, monitor incidents,
+                            and keep track of ICT equipment.
+                        </p>
+                    </div>
+
+                    <button class="primary-button" id="newIncidentBtn">
+                        + Report an Incident
+                    </button>
+                </section>
+
+                <!-- Incident Statistics -->
+                <section class="stats-grid" aria-label="Incident statistics">
+
+                    <article class="stat-card">
+                        <div class="stat-icon blue">▤</div>
+                        <p>Total Incidents</p>
+                        <h3 id="totalIncidents">0</h3>
+                        <small>All recorded incidents</small>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-icon orange">◷</div>
+                        <p>Open Incidents</p>
+                        <h3 id="openIncidents">0</h3>
+                        <small>Awaiting resolution</small>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-icon purple">⚙</div>
+                        <p>In Progress</p>
+                        <h3 id="inProgressIncidents">0</h3>
+                        <small>Currently being handled</small>
+                    </article>
+
+                    <article class="stat-card">
+                        <div class="stat-icon green">✓</div>
+                        <p>Resolved Incidents</p>
+                        <h3 id="resolvedIncidents">0</h3>
+                        <small>Successfully resolved</small>
+                    </article>
+
+                </section>
+
+                <!-- Support Insights: Incident Category Chart -->
+                <section class="content-card category-chart-panel">
+
+                    <div class="section-header">
+                        <div>
+                            <p class="eyebrow">SUPPORT INSIGHTS</p>
+                            <h2>Incidents by Category</h2>
+                            <p>
+                                See the percentage of ICT problems reported
+                                in each category.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="category-chart-layout">
+
+                        <!-- Doughnut Chart -->
+                        <div
+                            class="category-donut"
+                            id="categoryDonut"
+                            role="img"
+                            aria-label="Incident percentages by category"
+                        >
+                            <div class="category-donut-center">
+                                <strong id="categoryChartTotal">0</strong>
+                                <span>Total Incidents</span>
+                            </div>
+                        </div>
+
+                        <!-- Category Legend -->
+                        <div
+                            class="category-chart-legend"
+                            id="categoryChartLegend"
+                            aria-label="Incident category statistics"
+                        >
+                            <p class="category-chart-empty">
+                                Incident category statistics will appear here.
+                            </p>
+                        </div>
+
+                    </div>
+                </section>
+                <!-- End Support Insights -->
+
+                <!-- Recent Incidents -->
+                <section class="content-card">
+                    <div class="section-header">
+                        <div>
+                            <h2>Recent Incidents</h2>
+                            <p>Review and track ICT support requests.</p>
+                        </div>
+
+                        <button class="secondary-button" id="viewAllBtn">
+                            View All
+                        </button>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Ticket ID</th>
+                                    <th>Date Reported</th>
+                                    <th>Issue</th>
+                                    <th>Category</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="dashboardIncidentTableBody">
+                                <tr>
+                                    <td colspan="7" class="empty-state">
+                                        Your recent incidents will appear here.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Incidents Page -->
+            <div id="incidentsView" class="page-view" hidden>
+
+                <section class="content-card" id="incidents">
+                    <div class="section-header">
+                        <div>
+                            <h2>Incident Management</h2>
+                            <p>Review and track ICT support requests.</p>
+                        </div>
+
+                        <button class="primary-button" id="incidentsNewBtn">
+                            + Report an Incident
+                        </button>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Ticket ID</th>
+                                    <th>Date Reported</th>
+                                    <th>Issue</th>
+                                    <th>Category</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="incidentTableBody">
+                                <tr>
+                                    <td colspan="7" class="empty-state">
+                                        No incidents recorded yet.
+                                        Select "Report an Incident" to begin.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- ICT Assets Page -->
+            <div id="assetsView" class="page-view" hidden>
+
+                <article class="content-card" id="assets">
+                    <div class="section-header">
+                        <div>
+                            <h2>ICT Asset Management</h2>
+                            <p>Register and monitor ICT equipment.</p>
+                        </div>
+
+                        <button class="primary-button" id="addAssetBtn">
+                            + Add Asset
+                        </button>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Asset ID</th>
+                                    <th>Equipment</th>
+                                    <th>Brand / Model</th>
+                                    <th>Location</th>
+                                    <th>Condition</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="assetTableBody">
+                                <tr>
+                                    <td colspan="5" class="empty-state">
+                                        No equipment registered yet.
+                                        Select Add Asset to begin.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+
+            </div>
+
+            <!-- Reports Page -->
+            <div id="reportsView" class="page-view" hidden>
+
+                <article class="content-card" id="reports">
+
+                    <div class="section-header">
+                        <div>
+                            <h2>Generate ICT Report</h2>
+                            <p>
+                                Generate incident and ICT asset reports for review.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Report Filters -->
+                    <form id="reportForm" class="report-filters">
+
+                        <div class="form-group">
+                            <label for="reportStartDate">Start Date</label>
+                            <input type="date" id="reportStartDate">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reportEndDate">End Date</label>
+                            <input type="date" id="reportEndDate">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reportStatus">Incident Status</label>
+                            <select id="reportStatus">
+                                <option value="All">All Statuses</option>
+                                <option value="Open">Open</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+                        </div>
+
+                        <div class="form-actions report-actions">
+                            <button type="submit" class="primary-button">
+                                Generate Report
+                            </button>
+
+                            <button
+                                type="button"
+                                class="secondary-button"
+                                id="printReportBtn"
+                            >
+                                Print / Save as PDF
+                            </button>
+                        </div>
+
+                    </form>
+
+                    <!-- Generated Report -->
+                    <div id="generatedReport" class="generated-report">
+
+                        <div class="report-heading">
+                            <div>
+                                <h2>ICT SmartDesk Report</h2>
+                                <p>ICT Support and Asset Management</p>
+                            </div>
+
+                            <span class="feature-label">
+                                Demonstration Report
+                            </span>
+                        </div>
+
+                        <p id="reportPeriod">
+                            Select your filters and generate a report.
+                        </p>
+
+                        <!-- Report Summary -->
+                        <div class="stats-grid report-stats">
+
+                            <article class="stat-card">
+                                <p>Total Incidents</p>
+                                <h3 id="reportTotal">0</h3>
+                            </article>
+
+                            <article class="stat-card">
+                                <p>Open</p>
+                                <h3 id="reportOpen">0</h3>
+                            </article>
+
+                            <article class="stat-card">
+                                <p>In Progress</p>
+                                <h3 id="reportInProgress">0</h3>
+                            </article>
+
+                            <article class="stat-card">
+                                <p>Resolved</p>
+                                <h3 id="reportResolved">0</h3>
+                            </article>
+
+                        </div>
+
+                        <!-- Incident Report Table -->
+                        <h3>Incident Details</h3>
+
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Ticket ID</th>
+                                        <th>Date Reported</th>
+                                        <th>Issue</th>
+                                        <th>Category</th>
+                                        <th>Priority</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="reportIncidentTableBody">
+                                    <tr>
+                                        <td colspan="6" class="empty-state">
+                                            No report generated yet.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- ICT Asset Register Report -->
+                        <h3 class="report-subheading">
+                            ICT Asset Register Summary
+                        </h3>
+
+                        <p>
+                            Total registered assets:
+                            <strong id="reportAssetTotal">0</strong>
+                        </p>
+
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Asset ID</th>
+                                        <th>Equipment</th>
+                                        <th>Brand / Model</th>
+                                        <th>Location</th>
+                                        <th>Condition</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="reportAssetTableBody">
+                                    <tr>
+                                        <td colspan="5" class="empty-state">
+                                            No assets registered yet.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p class="report-footer">
+                            Generated by ICT SmartDesk — PDTP Cohort X
+                            Innovation Prototype. Demonstration data only;
+                            not an official PCF report.
+                        </p>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+            <!-- Footer -->
+            <footer class="app-footer">
+                <p>
+                    ICT SmartDesk 
+                </p>
+            </footer>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+</html>>

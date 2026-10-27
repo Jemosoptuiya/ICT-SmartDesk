@@ -1,0 +1,449 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ICT SmartDesk staff incident reporting portal.">
+    <title>Report an ICT Incident | ICT SmartDesk</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .staff-page {
+            min-height: 100vh;
+            background: #f1f5f9;
+            padding: 0 20px 40px;
+        }
+
+        .staff-header {
+            background: #0f2747;
+            color: white;
+            padding: 22px max(20px, calc((100% - 1000px) / 2));
+        }
+
+        .staff-header h1 {
+            margin: 0 0 6px;
+            font-size: 25px;
+        }
+
+        .staff-header p {
+            margin: 0;
+            color: #dbeafe;
+            font-size: 14px;
+        }
+
+        .staff-container {
+            max-width: 760px;
+            margin: 35px auto;
+        }
+
+        .staff-intro {
+            margin-bottom: 22px;
+        }
+
+        .staff-intro h2 {
+            color: #0f2747;
+            margin-bottom: 8px;
+        }
+
+        .staff-intro p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .staff-form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 5px 20px rgba(15, 39, 71, 0.07);
+        }
+
+        .staff-form-card label {
+            display: block;
+            color: #334155;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .staff-form-card input,
+        .staff-form-card select,
+        .staff-form-card textarea {
+            width: 100%;
+            padding: 12px 13px;
+            margin-bottom: 20px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            background: white;
+            color: #0f172a;
+            font: inherit;
+            box-sizing: border-box;
+        }
+
+        .staff-form-card input:focus,
+        .staff-form-card select:focus,
+        .staff-form-card textarea:focus {
+            outline: 2px solid #93c5fd;
+            border-color: #2563eb;
+        }
+
+        .staff-form-card textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        .staff-form-card button {
+            width: 100%;
+            padding: 14px;
+            background: #0056a6;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .staff-form-card button:hover {
+            background: #003b70;
+        }
+
+        .staff-form-card button:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        .staff-notice {
+            background: #eff6ff;
+            color: #1e40af;
+            border-left: 4px solid #2563eb;
+            padding: 13px 15px;
+            margin-bottom: 22px;
+            border-radius: 5px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .staff-footer {
+            text-align: center;
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 30px;
+            line-height: 1.8;
+        }
+
+        .staff-result {
+            display: none;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+            white-space: pre-line;
+        }
+
+        .staff-result.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #86efac;
+        }
+
+        .staff-result.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .staff-result .ticket-label {
+            font-weight: 700;
+        }
+
+        @media (max-width: 600px) {
+            .staff-form-card {
+                padding: 20px;
+            }
+
+            .staff-header h1 {
+                font-size: 21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="staff-header">
+        <h1>ICT SmartDesk</h1>
+        <p>Staff ICT Support Portal</p>
+    </header>
+
+    <main class="staff-page">
+        <div class="staff-container">
+
+            <section class="staff-intro">
+                <h2>Report an ICT Incident</h2>
+                <p>
+                    Experiencing an ICT problem? Submit the form below
+                    so the ICT support team can review your issue.
+                </p>
+            </section>
+
+            <section class="staff-form-card">
+                <div class="staff-notice">
+                    <strong>Before submitting:</strong>
+                    Describe the problem clearly. Do not include passwords
+                    or other confidential information.
+                </div>
+
+                <div
+                    id="staffResult"
+                    class="staff-result"
+                    role="status"
+                    aria-live="polite"
+                ></div>
+
+                <form id="staffIncidentForm">
+                    <label for="staffName">Full Name *</label>
+                    <input
+                        type="text"
+                        id="staffName"
+                        name="staffName"
+                        placeholder="Enter your full name"
+                        autocomplete="name"
+                        required
+                    >
+
+                    <label for="staffDepartment">Department *</label>
+                    <input
+                        type="text"
+                        id="staffDepartment"
+                        name="staffDepartment"
+                        placeholder="Enter your department"
+                        required
+                    >
+
+                    <label for="staffEmail">Work Email *</label>
+                    <input
+                        type="email"
+                        id="staffEmail"
+                        name="staffEmail"
+                        placeholder="name@example.com"
+                        autocomplete="email"
+                        required
+                    >
+
+                    <label for="incidentTitle">Incident Title *</label>
+                    <input
+                        type="text"
+                        id="incidentTitle"
+                        name="incidentTitle"
+                        placeholder="e.g. Unable to connect to Wi-Fi"
+                        maxlength="120"
+                        required
+                    >
+
+                    <label for="incidentCategory">Problem Category *</label>
+                    <select
+                        id="incidentCategory"
+                        name="incidentCategory"
+                        required
+                    >
+                        <option value="">Select a category</option>
+                        <option value="Hardware">Hardware</option>
+                        <option value="Network">Network</option>
+                        <option value="Software">Software</option>
+                        <option value="Printer">Printer</option>
+                        <option value="Email">Email</option>
+                        <option value="Other">Other</option>
+                    </select>
+
+                    <label for="incidentPriority">How Urgent Is It? *</label>
+                    <select
+                        id="incidentPriority"
+                        name="incidentPriority"
+                        required
+                    >
+                        <option value="">Select urgency</option>
+                        <option value="Low">Low - Minor inconvenience</option>
+                        <option value="Medium">Medium - Work affected</option>
+                        <option value="High">High - Major work disruption</option>
+                        <option value="Critical">Critical - Urgent widespread impact</option>
+                    </select>
+
+                    <label for="incidentDescription">
+                        Describe the Problem *
+                    </label>
+                    <textarea
+                        id="incidentDescription"
+                        name="incidentDescription"
+                        placeholder="Explain what happened, when it started, and any error message displayed."
+                        maxlength="3000"
+                        required
+                    ></textarea>
+
+                    <button type="submit" id="submitIncidentBtn">
+                        Submit Incident Report
+                    </button>
+                </form>
+            </section>
+
+            <footer class="staff-footer">
+                ICT SmartDesk Demonstration Prototype<br>
+                Not an official PCF system.
+            </footer>
+
+        </div>
+    </main>
+
+    <script>
+        // Supabase project connection
+        const SUPABASE_URL =
+            "https://qsacqcajdooorxuygrry.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_XwwFXd9EHBiTgju9ysf0iw_uF--myW_";
+
+        const form = document.getElementById("staffIncidentForm");
+        const result = document.getElementById("staffResult");
+        const submitButton = document.getElementById("submitIncidentBtn");
+
+        function showMessage(message, type) {
+            result.className = "staff-result " + type;
+            result.textContent = message;
+            result.style.display = "block";
+
+            result.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }
+
+        form.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            if (!form.reportValidity()) {
+                return;
+            }
+
+            const incident = {
+                staff_name: document.getElementById("staffName").value.trim(),
+                department: document.getElementById("staffDepartment").value.trim(),
+                staff_email: document.getElementById("staffEmail").value.trim(),
+                title: document.getElementById("incidentTitle").value.trim(),
+                category: document.getElementById("incidentCategory").value,
+                priority: document.getElementById("incidentPriority").value,
+                description: document.getElementById("incidentDescription").value.trim()
+            };
+
+            if (Object.values(incident).some(value => !value)) {
+                showMessage(
+                    "Please complete all required fields.",
+                    "error"
+                );
+                return;
+            }
+
+            if (!SUPABASE_KEY) {
+                showMessage(
+                    "The Supabase connection has not been configured.",
+                    "error"
+                );
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.textContent = "Submitting...";
+            result.style.display = "none";
+
+            try {
+                // Submit the incident through the Supabase function.
+                const response = await fetch(
+                    SUPABASE_URL +
+                    "/rest/v1/rpc/submit_smartdesk_incident",
+                    {
+                        method: "POST",
+                        headers: {
+                            "apikey": SUPABASE_KEY,
+                            "Authorization": "Bearer " + SUPABASE_KEY,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            p_staff_name: incident.staff_name,
+                            p_department: incident.department,
+                            p_staff_email: incident.staff_email,
+                            p_title: incident.title,
+                            p_category: incident.category,
+                            p_priority: incident.priority,
+                            p_description: incident.description
+                        })
+                    }
+                );
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+
+                    console.error(
+                        "Supabase submission error:",
+                        response.status,
+                        errorText
+                    );
+
+                    if (response.status === 401 || response.status === 403) {
+                        throw new Error(
+                            "Supabase denied the request. Check the database function permissions and publishable key."
+                        );
+                    }
+
+                    if (response.status === 404) {
+                        throw new Error(
+                            "The submission function was not found. Make sure submit_smartdesk_incident was created in Supabase."
+                        );
+                    }
+
+                    throw new Error(
+                        "The submission failed (HTTP " +
+                        response.status +
+                        "). Check the Supabase function and permissions."
+                    );
+                }
+
+                const ticketNumber = await response.json();
+
+                if (
+                    typeof ticketNumber !== "string" ||
+                    !ticketNumber.trim()
+                ) {
+                    throw new Error(
+                        "Supabase did not return a ticket number. Please contact ICT support before trying again."
+                    );
+                }
+
+                // Show the ticket number before clearing the form.
+                form.reset();
+
+                showMessage(
+                    "Incident submitted successfully!\n\n" +
+                    "YOUR TICKET NUMBER\n" +
+                    ticketNumber +
+                    "\n\nPlease save this number for future follow-up.",
+                    "success"
+                );
+
+            } catch (error) {
+                console.error("Incident submission failed:", error);
+
+                showMessage(
+                    error.message ||
+                    "Unable to submit your incident. Please try again.",
+                    "error"
+                );
+
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = "Submit Incident Report";
+            }
+        });
+    </script>
+</body>
+</html>
